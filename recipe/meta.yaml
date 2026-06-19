@@ -1,0 +1,54 @@
+{% set name = "axolotl-contribs-lgpl" %}
+{% set version = "0.0.7" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://pypi.org/packages/source/a/{{ name }}/axolotl_contribs_lgpl-{{ version }}.tar.gz
+  sha256: f797b3fd0adb5cbf93ed7070c8de61f90fd2f42cb93713e394970ab0e0a77a4d
+
+build:
+  number: 0
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
+
+requirements:
+  host:
+    - python
+    - pip
+    - setuptools
+    - wheel
+  run:
+    - python
+    - pytorch >=2.3.1
+    - numpy >=1.24.4
+    - datasets >=3.1.0
+
+test:
+  imports:
+    - axolotl.contribs.lgpl
+  commands:
+    - pip check
+  requires:
+    - pip
+
+about:
+  home: https://github.com/axolotl-ai-cloud/axolotl
+  license: LGPL-3.0-or-later
+  license_family: LGPL
+  license_file: LICENSE
+  summary: LGPL-licensed contrib modules for Axolotl
+  description: |
+    LGPL-licensed contributed modules for the Axolotl LLM fine-tuning framework,
+    packaging helpers (e.g. token-embedding fixes adapted from Unsloth) as the
+    axolotl.contribs.lgpl namespace.
+  doc_url: https://docs.axolotl.ai
+  dev_url: https://github.com/axolotl-ai-cloud/axolotl
+
+extra:
+  skip-lints:
+    # pytorch and numpy are CBC-pinned runtime-only deps (pure-Python; not linked at build)
+    - cbc_dep_in_run_missing_from_host
+  recipe-maintainers:
+    - xkong-anaconda
